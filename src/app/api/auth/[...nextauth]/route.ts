@@ -1,96 +1,36 @@
 import { JWT } from "next-auth/jwt";
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import CredentialPovider from "next-auth/providers/credentials";
-import { decrypt, encrypt } from "~/lib/session";
-import { IUser } from "~/types/user";
-import httpClient from "~/api/httpClient";
+import { User } from "~/types/user";
 
-const MAX_AGE = +(process.env.NEXTAUTH_MAXAGE || 10);
-const API_ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT || "";
-export const authOptions: NextAuthOptions = {
+const MAX_AGE = +(process.env.NEXTAUTH_MAXAGE || 60 * 60 * 24 * 30);
+export const authOptions: AuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-    }),
-    CredentialPovider({
-      name: "Credentials",
-      credentials: {
-        username: { label: "Name", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials, req) {
-        try {
-          const res = await httpClient.post(`${API_ENDPOINT}/auth/signin`, {
-            username: credentials?.username,
-            password: credentials?.password,
-          });
-          const userData = await res.data;
-          console.log("user", userData);
-          return userData.user;
-        } catch {
-          throw new Error("Username or password incorret!");
-        }
-      },
     }),
   ],
   session: {
     strategy: "jwt",
     maxAge: MAX_AGE,
   },
-  secret: process.env.NEXTAUTH_SECRET,
-  jwt: {
-    maxAge: MAX_AGE,
-    encode: async (params) => {
-      const { token } = params;
-      try {
-        const user = (await userService.findByFilter({ email: token?.email }))
-          .data;
-        console.log("endcode", user);
-        return await encrypt({
-          ...user,
-          name: token?.name || "",
-          email: token?.email || "",
-        });
-      } catch {
-        // Nếu không tìm thấy user, vẫn mã hóa với name + email có sẵn
-        return await encrypt({
-          name: token?.name || "",
-          email: token?.email || "",
-        });
-      }
-    },
-    async decode(params): Promise<JWT | null> {
-      // params = {
-      //   token: string;
-      //   secret: string;
-      // }
-      const decrypted = await decrypt(params.token);
-      return decrypted || null;
-    },
-  },
+  secret: process.env.AUTH_SECRET,
   callbacks: {
-    async signIn(data) {
-      const { email } = data.user;
-      try {
-        const exist = await userService.findByFilter({ email });
-        if (exist) {
-          return true;
-        }
-        await userService.signupByEmail(email || "");
+    async signIn(props: any) {
+      const { account, profile } = props;
+      if (account?.provider === "google") {
         return true;
-      } catch (err) {
-        console.log(err);
       }
-      return false;
+      return true;
     },
-    jwt({ token, user, account, ...rest }) {
-      console.log("callbacks token", token, user, account, rest);
+    jwt({ token, ...rest }) {
+      console.log("callbacks token", token, rest);
       return token;
     },
-    async session({ session, token, ...rest }) {
-      session.user = token as IUser & JWT;
+    session({ session, token }) {
+      console.log("callbacks session", session, token);
+      session.user = token as User & JWT;
       return session;
     },
   },

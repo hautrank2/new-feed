@@ -1,19 +1,24 @@
-export interface IUser {
-  _id?: string;
+export interface User {
+  id: number;
+  name: string;
   username: string;
-  email?: string;
-  password: string;
+  email: string;
+  image: string;
+  address?: {
+    street: string;
+    suite: string;
+    city: string;
+    zipcode: string;
+    geo: {
+      lat: string;
+      lng: string;
+    };
+  };
   phone?: string;
-  isValidPhone?: boolean;
-  name?: string;
-  role: RoleType;
-  isActive: boolean;
-  emailOrPhone?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export enum RoleType {
-  ADMIN = "admin",
-  CUSTOMER = "customer",
+  website?: string;
+  company?: {
+    name: string;
+    catchPhrase: string;
+    bs: string;
+  };
 }

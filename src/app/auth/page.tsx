@@ -17,8 +17,11 @@ import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
 import { useAuth } from "./pageHook";
 
-const AuthPage = () => {
-  const { form, handleLogin, loading, handleLoginGoogle } = useAuth();
+export type AuthPageProps = {
+  prePathname: string;
+};
+const AuthPage = (props: AuthPageProps) => {
+  const { form, handleLogin, loading, handleLoginGoogle } = useAuth(props);
   const {
     register,
     handleSubmit,

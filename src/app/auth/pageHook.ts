@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { signIn } from "next-auth/react";
+import { AuthPageProps } from "./page";
 
 export const LoginSchema = z.object({
   usernameOrEmail: z.string().min(1, "Required"),
@@ -11,7 +12,7 @@ export const LoginSchema = z.object({
 
 export type LoginValues = z.infer<typeof LoginSchema>;
 
-export const useAuth = () => {
+export const useAuth = ({ prePathname }: AuthPageProps) => {
   const [loading, setLoading] = useState(false);
 
   const form = useForm<LoginValues>({ resolver: zodResolver(LoginSchema) });
@@ -31,9 +32,7 @@ export const useAuth = () => {
 
   const handleLoginGoogle = async () => {
     // TODO: Wire to your Google OAuth. Example (NextAuth): signIn("google")
-    await signIn("google", { callbackUrl: "/" });
-
-    console.log("Login with Google");
+    await signIn("google", { callbackUrl: prePathname ?? "/" });
   };
 
   const handleLogin = async () => {};
