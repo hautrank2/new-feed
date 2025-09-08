@@ -17,7 +17,7 @@ export interface HttpResponse {
 
 // Create Axios instance
 const httpClient: AxiosInstance = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_API_ENDPOINT}`,
+  baseURL: "",
   headers: {
     "Content-Type": "application/json",
   },

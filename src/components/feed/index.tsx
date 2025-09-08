@@ -1,16 +1,21 @@
+"use client";
+
 import { AppSession } from "~/types/session";
 import FeedProvider from "./context";
 import { FeedPage } from "./FeedPage";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-export * from "./FeedPage";
+const queryClient = new QueryClient({});
 
 export type FeedProps = {
   session: AppSession;
 };
-export const Feed = ({ session }: FeedProps) => {
+export const FeedView = ({ session }: FeedProps) => {
   return (
-    <FeedProvider session={session}>
-      <FeedPage />
-    </FeedProvider>
+    <QueryClientProvider client={queryClient}>
+      <FeedProvider session={session}>
+        <FeedPage />
+      </FeedProvider>
+    </QueryClientProvider>
   );
 };
