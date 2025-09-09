@@ -1,1 +1,72 @@
-{}
+[
+  {
+    "id": 1,
+    "name": "Alice Johnson",
+    "username": "user_1",
+    "email": "user1@example.com",
+    "avatarUrl": "https://randomuser.me/api/portraits/women/1.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Bob Smith",
+    "username": "user_2",
+    "email": "user2@example.com",
+    "avatarUrl": "https://randomuser.me/api/portraits/men/2.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Charlie Nguyen",
+    "username": "user_3",
+    "email": "user3@example.com",
+    "avatarUrl": "https://randomuser.me/api/portraits/men/3.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Diana Tran",
+    "username": "user_4",
+    "email": "user4@example.com",
+    "avatarUrl": "https://randomuser.me/api/portraits/women/4.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Ethan Lee",
+    "username": "user_5",
+    "email": "user5@example.com",
+    "avatarUrl": "https://randomuser.me/api/portraits/men/5.jpg"
+  },
+  {
+    "id": 6,
+    "name": "Fiona Brown",
+    "username": "user_6",
+    "email": "user6@example.com",
+    "avatarUrl": "https://randomuser.me/api/portraits/women/6.jpg"
+  },
+  {
+    "id": 7,
+    "name": "George Pham",
+    "username": "user_7",
+    "email": "user7@example.com",
+    "avatarUrl": "https://randomuser.me/api/portraits/men/7.jpg"
+  },
+  {
+    "id": 8,
+    "name": "Hannah Davis",
+    "username": "user_8",
+    "email": "user8@example.com",
+    "avatarUrl": "https://randomuser.me/api/portraits/women/8.jpg"
+  },
+  {
+    "id": 9,
+    "name": "Ivan Garcia",
+    "username": "user_9",
+    "email": "user9@example.com",
+    "avatarUrl": "https://randomuser.me/api/portraits/men/9.jpg"
+  },
+  {
+    "id": 10,
+    "name": "Julia Kim",
+    "username": "user_10",
+    "email": "user10@example.com",
+    "avatarUrl": "https://randomuser.me/api/portraits/women/10.jpg"
+  }
+]
