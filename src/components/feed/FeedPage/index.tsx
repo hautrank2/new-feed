@@ -17,13 +17,9 @@ import { Heart } from "lucide-react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "~/components/ui/dialog";
-import { DialogClose } from "@radix-ui/react-dialog";
 import { useFeedPage } from "./hook";
 import { FeedComment } from "../FeedComment";
 
@@ -32,7 +28,7 @@ export const FeedPage = () => {
   const { handleOpenComment, handleCloseComment, openComment } = useFeedPage();
 
   return (
-    <div className="mt-[var(--header-height)] pt-8 container mx-auto max-w-4xl">
+    <div className="mt-[var(--header-height)] pt-8 container mx-auto max-w-4xl pb-8">
       {feeds.map((feed, index) => {
         const isFirst = index === 0;
         return (
@@ -71,11 +67,13 @@ export const FeedPage = () => {
           }
         }}
       >
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] md:max-w-[60vw] lg:max-w-[40vw]">
           <DialogHeader>
             <DialogTitle>Comment</DialogTitle>
           </DialogHeader>
-          <div>{openComment && <FeedComment feedData={openComment} />}</div>
+          <div className="max-h-[80vh] overflow-y-auto relative">
+            {openComment && <FeedComment feedData={openComment} />}
+          </div>
         </DialogContent>
       </Dialog>
     </div>

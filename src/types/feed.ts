@@ -18,3 +18,10 @@ export type CommentModel = {
   parentId?: string;
   children: CommentModel[];
 };
+
+export type CreateCommentDto = {
+  feedId: string;
+  authorId: string;
+  content: string;
+  parentId?: string;
+};

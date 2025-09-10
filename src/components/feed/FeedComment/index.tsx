@@ -1,6 +1,5 @@
 import { CommentModel, FeedModel } from "~/types/feed";
 import { useFeedComment } from "./hook";
-import { AvatarGroup } from "~/components/ui/shadcn-io/avatar-group";
 import { Avatar } from "~/components/ui/avatar";
 import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Typography } from "~/components/ui/typography";
@@ -8,31 +7,62 @@ import { formatDateTime } from "~/utils/datetime";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { SendHorizonal } from "lucide-react";
+import { Controller } from "react-hook-form";
 
 export type FeedCommentProps = {
   feedData: FeedModel;
 };
 
 export const FeedComment = (props: FeedCommentProps) => {
-  const { data } = useFeedComment(props);
+  const { data, form, onSubmit, inputRef, onReply } = useFeedComment(props);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = form;
+
   return (
-    <div className="relative">
+    <div>
       <ul>
         {data.map((item) => {
           return (
             <li key={item.id} className="mt-2">
-              <FeedCommentItem cmtData={item} onReply={() => {}} />
+              <FeedCommentItem
+                cmtData={item}
+                onReply={() => {
+                  onReply(item);
+                }}
+              />
             </li>
           );
         })}
       </ul>
 
-      <div className="sticky top-full inset-x-0 flex justify-between gap-2 mt-2">
-        <Input />
-        <Button variant={"outline"}>
-          <SendHorizonal />
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="sticky bottom-0 bg-background inset-x-0 flex justify-between gap-2 mt-2 p-2"
+      >
+        <Controller
+          name="content"
+          control={form.control}
+          render={({ field }) => (
+            <Input
+              {...field} // must pass value, onChange, onBlur, name
+              ref={inputRef}
+              placeholder="Write a comment..."
+              className="flex-1"
+            />
+          )}
+        />
+        <Button type="submit" variant="outline" disabled={isSubmitting}>
+          <SendHorizonal size={18} />
         </Button>
-      </div>
+      </form>
+
+      {errors.content && (
+        <p className="text-sm text-red-500 mt-1">{errors.content.message}</p>
+      )}
     </div>
   );
 };

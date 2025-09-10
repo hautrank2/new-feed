@@ -15,6 +15,7 @@ export type FeedContextValue = {
     InfiniteData<TableResponse<FeedModel>, unknown>
   >;
   feeds: FeedModel[];
+  session: AppSession | null;
 };
 
 const FeedContext = React.createContext<FeedContextValue | undefined>(
@@ -56,7 +57,7 @@ export default function FeedProvider({
   }, [feedData.data]);
 
   return (
-    <FeedContext.Provider value={{ feedData, feeds }}>
+    <FeedContext.Provider value={{ feedData, feeds, session }}>
       {children}
     </FeedContext.Provider>
   );

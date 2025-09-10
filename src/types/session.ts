@@ -1,6 +1,6 @@
 import { Session } from "next-auth";
-import { User } from "./user";
+import { UserModel } from "./user";
 
 export type AppSession = Session & {
-  user: User;
+  user: UserModel;
 };
