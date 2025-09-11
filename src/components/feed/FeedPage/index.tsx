@@ -44,7 +44,7 @@ export const FeedPage = () => {
               <div className="flex items-center justify-center w-full gap-2">
                 <Button className="flex-1" variant={"ghost"}>
                   <Heart />
-                  Like
+                  Heart ({feed.tym.length})
                 </Button>
                 <Button
                   className="flex-1"
@@ -71,7 +71,7 @@ export const FeedPage = () => {
           <DialogHeader>
             <DialogTitle>Comment</DialogTitle>
           </DialogHeader>
-          <div className="max-h-[80vh] overflow-y-auto relative">
+          <div className="max-h-[80vh]">
             {openComment && <FeedComment feedData={openComment} />}
           </div>
         </DialogContent>

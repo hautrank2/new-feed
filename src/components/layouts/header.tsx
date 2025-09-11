@@ -3,11 +3,30 @@
 import React, { useEffect, useState } from "react";
 import { Typography } from "~/components/ui/typography";
 import { cn } from "~/lib/utils";
-import Nav from "./nav";
+import { AppSession } from "~/types/session";
+import { Avatar, AvatarImage } from "../ui/avatar";
+import { AvatarFallback } from "@radix-ui/react-avatar";
+import Image from "next/image";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from "~/components/ui/dropdown-menu";
+import { signOut } from "next-auth/react";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
-function Header() {
+type HeaderProps = {
+  session: AppSession | null;
+};
+function Header({ session }: HeaderProps) {
   const headerHeight = 64;
   const [headerBg, setHeaderBg] = useState(false);
+  const authed = !!session && !!session.user;
+  console.log(session, authed);
 
   useEffect(() => {
     const trackingScroll = () => {
@@ -34,7 +53,7 @@ function Header() {
         headerBg ? "bg-background/90" : ""
       )}
     >
-      <div className="header-branch">
+      <Link href={"/"} className="header-branch">
         <Typography
           variant={"h3"}
           className="flex items-center gap-1
@@ -45,10 +64,59 @@ function Header() {
             hautrank2
           </span>
         </Typography>
-      </div>
+      </Link>
       <div className="header-search px-16"></div>
       <div className="header-extra flex items-center gap-4">
         {/* <Nav /> */}
+        {authed ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="flex items-center gap-2 rounded-full hover:opacity-90 focus:outline-none"
+                aria-label="Open user menu"
+              >
+                <Avatar className="h-9 w-9">
+                  {session!.user.image && (
+                    <Image
+                      src={session!.user.image}
+                      alt={session!.user.name ?? "User"}
+                      width={40}
+                      height={40}
+                    />
+                  )}
+                  <AvatarFallback>
+                    {session.user.name.slice(0, 2)}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="text-sm font-medium">
+                  {session!.user.name}
+                </span>
+              </button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel className="truncate">
+                {session!.user.email ?? session!.user.name}
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="cursor-pointer"
+              >
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Link href="/auth">
+            <Button
+              variant={"ghost"}
+              className="px-3 py-1.5 text-sm rounded-md border hover:bg-accent"
+            >
+              Sign in
+            </Button>
+          </Link>
+        )}
       </div>
     </header>
   );

@@ -1,7 +1,10 @@
+import { randomUUID } from "crypto";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
-import { CommentModel } from "~/types/feed";
+import { CommentModel, CreateCommentDto } from "~/types/feed";
+import { AppJWT } from "~/types/session";
 import { UserModel } from "~/types/user";
-import { readJsonFile } from "~/utils/file";
+import { readJsonFile, writeJsonFile } from "~/utils/file";
 
 export async function GET(req: NextRequest) {
   try {
@@ -28,20 +31,64 @@ export async function GET(req: NextRequest) {
   }
 }
 
+export async function POST(req: NextRequest) {
+  try {
+    const token = (await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET, // đồng bộ với NextAuth
+    })) as AppJWT | null;
+
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const dto = (await req.json()) as CreateCommentDto | null;
+    if (!dto || !dto.feedId || !dto.content?.trim()) {
+      return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+    }
+
+    const comments: CommentModel[] = await readJsonFile<CommentModel[]>(
+      "src/data/comment.json"
+    ).catch(() => []);
+
+    // Lấy authorId từ token (ưu tiên token.id do bạn đã chuẩn hoá, fallback sub)
+    const authorId = token.id || token.sub;
+    if (!authorId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const newComment: CommentModel = {
+      id: randomUUID(),
+      feedId: dto.feedId,
+      authorId,
+      content: dto.content.trim(),
+      parentId: dto.parentId ?? null,
+      createdAt: new Date().toISOString(),
+    };
+
+    comments.push(newComment);
+    await writeJsonFile("src/data/comment.json", comments);
+
+    return NextResponse.json(newComment, { status: 201 });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json(
+      { error: "Failed to create comment" },
+      { status: 500 }
+    );
+  }
+}
 export function buildCommentTreeWithUser(
   list: CommentModel[],
   users: UserModel[]
 ): CommentModel[] {
-  // Map user theo username (trùng với authorId)
   const userMap = new Map<string, UserModel>();
-  users.forEach((u) => userMap.set(u.username, u));
+  users.forEach((u) => userMap.set(u.id, u));
 
-  // sort theo thời gian để output ổn định
   const sorted = [...list].sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
   );
 
-  // khởi tạo node có kèm author
   const nodeMap = new Map<string, CommentModel>();
   const roots: CommentModel[] = [];
 
@@ -53,14 +100,12 @@ export function buildCommentTreeWithUser(
     });
   }
 
-  // gắn con vào cha
   for (const node of nodeMap.values()) {
     if (node.parentId) {
       const parent = nodeMap.get(node.parentId);
       if (parent) {
         parent.children!.push(node);
       } else {
-        // nếu dữ liệu thiếu cha -> đẩy lên root để không mất dữ liệu
         roots.push(node);
       }
     } else {

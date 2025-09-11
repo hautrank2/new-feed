@@ -49,8 +49,6 @@ export default function FeedProvider({
     },
   });
 
-  console.log(feedData.data);
-
   const feeds = useMemo(() => {
     if (!feedData.data) return [];
     return feedData.data.pages.flatMap((page) => page.items);

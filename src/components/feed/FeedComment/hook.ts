@@ -1,10 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { AxiosResponse } from "axios";
 import httpClient from "~/api/httpClient";
 import { useFeed } from "../context";
 import { CommentModel, CreateCommentDto } from "~/types/feed";
@@ -12,22 +10,23 @@ import { CommentModel, CreateCommentDto } from "~/types/feed";
 const commentSchema = z.object({
   content: z.string().trim().min(1, "Comment cannot be empty"),
 });
-type CommentFormValues = z.infer<typeof commentSchema>;
+export type CommentFormValues = z.infer<typeof commentSchema>;
 
 type FeedCommentProps = {
   feedData: { id: string };
 };
 
 export const useFeedComment = ({ feedData }: FeedCommentProps) => {
-  const [replyingCmtId, setReplyingCmtId] = useState<string | null>(null);
-  const queryClient = useQueryClient();
+  const [replyingCmt, setReplyingCmt] = useState<CommentModel | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const { session } = useFeed();
 
   const queryKey = ["feed", "comments", feedData.id] as const;
 
   // GET comments
-  const { data = [] } = useQuery({
+  const { data = [], refetch } = useQuery({
     initialData: [],
     queryKey,
     queryFn: () =>
@@ -53,92 +52,84 @@ export const useFeedComment = ({ feedData }: FeedCommentProps) => {
       const body: CreateCommentDto = {
         feedId: feedData.id,
         content: payload.content,
-        parentId: payload.parentId,
-        authorId: session?.user.id ?? null,
+        parentId: payload.parentId ?? undefined,
+        authorId: session?.user.id ?? "",
       };
       const res = await httpClient.post<CommentModel>("/api/comment", body);
       return res.data;
     },
-
-    // Optimistic update
-    onMutate: async ({ content, parentId }) => {
-      await queryClient.cancelQueries({ queryKey });
-
-      const previous = queryClient.getQueryData<CommentModel[]>(queryKey) ?? [];
-      const tempId = `temp-${crypto.randomUUID?.() ?? Date.now()}`;
-
-      const optimisticItem: CommentModel = {
-        id: tempId,
-        feedId: feedData.id,
-        content,
-        createdAt: new Date().toISOString(),
-        parentId: parentId ?? null,
-        authorId: session?.user.id ?? null,
-      };
-
-      queryClient.setQueryData<CommentModel[]>(queryKey, (old = []) => [
-        optimisticItem,
-        ...old,
-      ]);
-
-      return { previous, tempId };
-    },
-
-    onError: (_err, _vars, ctx) => {
-      if (ctx?.previous) {
-        queryClient.setQueryData<CommentModel[]>(queryKey, ctx.previous);
-      }
-    },
-
-    onSuccess: (serverItem, _vars, ctx) => {
-      // Replace temp by server item
-      queryClient.setQueryData<CommentModel[]>(queryKey, (old = []) =>
-        old.map((c) => (c.id === ctx?.tempId ? serverItem : c))
-      );
-    },
-
-    onSettled: () => {
-      // Nếu muốn đồng bộ tuyệt đối với server
-      // queryClient.invalidateQueries({ queryKey });
+    onSuccess: () => {
+      refetch();
     },
   });
 
+  const { mutate: deleteMutate, isPending: deleteLoading } = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await httpClient.delete<CommentModel>(`/api/comment/${id}`);
+      return res.data;
+    },
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const loading = useMemo(
+    () => deleteLoading || isPending,
+    [isPending, deleteLoading]
+  );
+
   const onSubmit = (values: CommentFormValues) => {
     mutate(
-      { content: values.content, parentId: replyingCmtId },
+      { content: values.content, parentId: replyingCmt?.id ?? null },
       {
         onSuccess: () => {
           form.reset({ content: "" });
-          setReplyingCmtId(null);
-          inputRef.current?.focus();
+          const scrollToOptions: ScrollToOptions = {
+            behavior: "smooth",
+            top: 4,
+          };
+          if (!!replyingCmt) {
+            document.getElementById(replyingCmt.id)?.scrollTo(scrollToOptions);
+          } else {
+            containerRef.current?.scrollTo(scrollToOptions);
+          }
+          setReplyingCmt(null);
         },
       }
     );
   };
 
+  const handleDelete = (item: CommentModel) => {
+    deleteMutate(item.id);
+  };
+
   const onReply = (cmt: CommentModel) => {
-    setReplyingCmtId(cmt.id);
-    // focus input để gõ nhanh
+    setReplyingCmt(cmt);
     requestAnimationFrame(() => inputRef.current?.focus());
   };
 
-  const cancelReply = () => setReplyingCmtId(null);
+  const cancelReply = () => {
+    setReplyingCmt(null);
+  };
 
   useEffect(() => {
-    if (replyingCmtId) {
+    if (replyingCmt) {
       inputRef.current?.focus();
     }
-  }, [replyingCmtId]);
+  }, [replyingCmt]);
 
   return {
     data,
     form,
     onSubmit,
     inputRef,
+    containerRef,
     onReply,
     cancelReply,
-    replyingCmtId,
+    replyingCmt,
     isPosting: isPending,
+    handleDelete,
     postError: error as unknown,
+    loading,
   };
 };

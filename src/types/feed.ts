@@ -5,18 +5,21 @@ export type FeedModel = {
   title: string;
   desc: string;
   imgs: [];
-  createdAt: Date;
+  createdAt: string;
+  tym: string[];
 };
 
 export type CommentModel = {
   id: string;
   feedId: string;
   authorId: string;
-  author: UserModel | null;
   content: string;
-  createdAt: Date;
-  parentId?: string;
-  children: CommentModel[];
+  createdAt: string;
+  parentId: string | null;
+
+  // When GET DATA have:
+  author?: UserModel | null;
+  children?: CommentModel[];
 };
 
 export type CreateCommentDto = {

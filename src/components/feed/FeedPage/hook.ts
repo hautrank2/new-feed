@@ -1,8 +1,5 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { TableResponse, TableResponseBase } from "~/types/api";
-import httpClient from "~/api/httpClient";
 import { FeedModel } from "~/types/feed";
 import { useState } from "react";
 
@@ -13,7 +10,7 @@ export const useFeedPage = () => {
     setOpenComment(feed);
   };
 
-  const handleCloseComment = () => {
+  const handleCloseComment = (refetch?: boolean) => {
     setOpenComment(null);
   };
 
