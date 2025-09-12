@@ -5,8 +5,9 @@ export type FeedModel = {
   title: string;
   desc: string;
   imgs: [];
-  createdAt: string;
   tym: string[];
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type CommentModel = {
@@ -28,3 +29,5 @@ export type CreateCommentDto = {
   content: string;
   parentId?: string;
 };
+
+export type PatchFeedDto = FeedModel;
