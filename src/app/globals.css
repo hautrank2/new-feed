@@ -79,6 +79,13 @@
   --sidebar-ring: oklch(0.704 0.04 256.788);
 
   --header-height: 64px;
+  --scroll-size: 10px;
+  --scroll-radius: 999px;
+
+  /* kế thừa trực tiếp từ palette sẵn có */
+  --scroll-track: var(--muted);
+  --scroll-thumb: var(--muted-foreground);
+  --scroll-thumb-hover: var(--primary);
 }
 
 .dark {
@@ -123,4 +130,34 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+html,
+body,
+* {
+  scrollbar-width: thin;
+  /* auto | thin | none */
+  scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+}
+
+/* WebKit (Chromium, Safari, Edge) */
+*::-webkit-scrollbar {
+  width: var(--scroll-size);
+  height: var(--scroll-size);
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+  border-radius: var(--scroll-radius);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-thumb);
+  border: 2px solid var(--scroll-track);
+  /* tạo kênh, nhìn “mịn” hơn */
+  border-radius: var(--scroll-radius);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scroll-thumb-hover);
 }

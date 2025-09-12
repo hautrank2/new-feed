@@ -18,6 +18,7 @@ import {
 import { signOut } from "next-auth/react";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { ThemeToggle } from "./ModeToggle";
 
 type HeaderProps = {
   session: AppSession | null;
@@ -72,6 +73,7 @@ function Header({ session }: HeaderProps) {
       </div>
       <div className="header-search px-16"></div>
       <div className="header-extra flex items-center gap-4">
+        <ThemeToggle />
         {/* <Nav /> */}
         {authed ? (
           <DropdownMenu>
