@@ -19,7 +19,6 @@ export const authOptions: AuthOptions = {
   secret: process.env.AUTH_SECRET,
   callbacks: {
     async signIn(props: any) {
-      console.log("signin", props);
       const { account, profile, user } = props;
       if (account?.provider === "google") {
         // 1. GET USER
@@ -63,7 +62,6 @@ export const authOptions: AuthOptions = {
       return false;
     },
     async jwt({ token, ...rest }) {
-      console.log("callbacks token", token, rest);
       const users: UserModel[] = await readJsonFile("src/data/user.json");
       const findUser = users.find((u) => u.email === token.email);
 
@@ -73,7 +71,6 @@ export const authOptions: AuthOptions = {
       };
     },
     async session({ session, token }) {
-      console.log("callbacks session", session, token);
       const users: UserModel[] = await readJsonFile("src/data/user.json");
       const findUser = users.find((u) => u.email === token.email);
       session.user = findUser;

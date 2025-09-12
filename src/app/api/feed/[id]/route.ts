@@ -10,10 +10,16 @@ export async function GET(
   ctx: { params: Promise<{ id: string }> }
 ) {
   try {
+    const token = (await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET,
+    })) as AppJWT | null;
+
     const { id } = await ctx.params;
     const feeds = await readJsonFile<FeedModel[]>(FEED_PATH);
     const find = feeds.find((e) => e.id === id);
     if (find) {
+      find.liked = token ? find.tym.includes(token.id) : false;
       return NextResponse.json(find);
     }
     return NextResponse.json({ error: "Feed not found" }, { status: 404 });

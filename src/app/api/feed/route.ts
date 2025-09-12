@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FeedModel } from "~/types/feed";
-import { getFilePath, readJsonFile, writeJsonFile } from "~/utils/file";
+import { getFilePath, readJsonFile } from "~/utils/file";
 
 const FEED_PATH = getFilePath("src/data/feed.json");
 const API_URL = process.env.NEXT_PUBLIC_API_ENDPOINT;

@@ -6,6 +6,7 @@ export type FeedModel = {
   desc: string;
   imgs: [];
   tym: string[];
+  liked: boolean;
   createdAt: string;
   updatedAt: string;
 };

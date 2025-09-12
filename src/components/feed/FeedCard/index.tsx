@@ -18,16 +18,23 @@ import {
   DialogTitle,
 } from "~/components/ui/dialog";
 import { FeedComment } from "../FeedComment";
+import { Separator } from "~/components/ui/separator";
+import { HeartButton } from "./HeartBtn";
 
 export type FeedCardProps = {
   feedId: string;
 };
 export const FeedCard = (props: FeedCardProps) => {
-  const { feed, handleOpenComment, handleCloseComment, openComment } =
-    useFeedCard(props);
+  const {
+    feed,
+    handleOpenComment,
+    handleCloseComment,
+    openComment,
+    handleToggleHeart,
+  } = useFeedCard(props);
 
   return feed ? (
-    <Card>
+    <Card className="pb-0">
       <CardHeader>
         <CardTitle>{feed.title}</CardTitle>
         <CardDescription>{feed.desc}</CardDescription>
@@ -35,12 +42,13 @@ export const FeedCard = (props: FeedCardProps) => {
       <CardContent>
         <ImageGrid imgs={feed.imgs} objectFit="cover" />
       </CardContent>
-      <CardFooter>
+      <CardFooter className="border-t p-2!">
         <div className="flex items-center justify-center w-full gap-2">
-          <Button className="flex-1" variant={"ghost"}>
-            <Heart />
-            Heart ({feed.tym.length})
-          </Button>
+          <HeartButton
+            count={feed.tym.length}
+            liked={feed.liked}
+            onToggleHeart={handleToggleHeart}
+          />
           <Button
             className="flex-1"
             variant={"ghost"}
