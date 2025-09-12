@@ -2,6 +2,7 @@ import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 import { FeedModel, PatchFeedDto } from "~/types/feed";
 import { AppJWT } from "~/types/session";
+import { UserModel } from "~/types/user";
 import { getFilePath, readJsonFile, writeJsonFile } from "~/utils/file";
 
 const FEED_PATH = getFilePath("src/data/feed.json");
@@ -19,7 +20,9 @@ export async function GET(
     const feeds = await readJsonFile<FeedModel[]>(FEED_PATH);
     const find = feeds.find((e) => e.id === id);
     if (find) {
+      const users = await readJsonFile<UserModel[]>("src/data/user.json");
       find.liked = token ? find.tym.includes(token.id) : false;
+      find.user = users.find((e) => e.id === find.createdBy);
       return NextResponse.json(find);
     }
     return NextResponse.json({ error: "Feed not found" }, { status: 404 });

@@ -20,6 +20,10 @@ import {
 import { FeedComment } from "../FeedComment";
 import { Separator } from "~/components/ui/separator";
 import { HeartButton } from "./HeartBtn";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import Image from "next/image";
+import { formatDateTime } from "~/utils/datetime";
+import { Typography } from "~/components/ui/typography";
 
 export type FeedCardProps = {
   feedId: string;
@@ -36,10 +40,28 @@ export const FeedCard = (props: FeedCardProps) => {
   return feed ? (
     <Card className="pb-0">
       <CardHeader>
-        <CardTitle>{feed.title}</CardTitle>
-        <CardDescription>{feed.desc}</CardDescription>
+        {feed.user && (
+          <div className="flex items-center gap-4">
+            <Avatar className="w-12 h-12">
+              <AvatarImage src={feed.user.image} alt={feed.user.name} />
+              <AvatarFallback>{feed.user.name.slice(0, 2)}</AvatarFallback>
+            </Avatar>
+            <div>
+              <CardTitle>{feed.user.name}</CardTitle>
+              <CardDescription>{`${feed.user.email} - ${formatDateTime(
+                feed.createdAt
+              )}`}</CardDescription>
+            </div>
+          </div>
+        )}
       </CardHeader>
       <CardContent>
+        <div className="mb-4">
+          <Typography variant={"h4"} className="mb-2">
+            {feed.title}
+          </Typography>
+          <Typography variant={"p"}>{feed.desc}</Typography>
+        </div>
         <ImageGrid imgs={feed.imgs} objectFit="cover" />
       </CardContent>
       <CardFooter className="border-t p-2!">

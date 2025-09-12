@@ -9,6 +9,8 @@ export type FeedModel = {
   liked: boolean;
   createdAt: string;
   updatedAt: string;
+  createdBy: string;
+  user?: UserModel;
 };
 
 export type CommentModel = {

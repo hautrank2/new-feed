@@ -12,7 +12,8 @@ export const FeedPage = () => {
 
   return (
     <div className="mt-[var(--header-height)] pt-8 container mx-auto max-w-4xl pb-8">
-      <ul>
+      {/* filter */}
+      <ul className="px-4">
         {feeds.map((feed, index) => {
           const isFirst = index === 0;
           return (

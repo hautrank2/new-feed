@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Typography } from "~/components/ui/typography";
 import { cn } from "~/lib/utils";
 import { AppSession } from "~/types/session";
-import { Avatar, AvatarImage } from "../ui/avatar";
+import { Avatar } from "../ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import Image from "next/image";
 import {
@@ -53,18 +53,23 @@ function Header({ session }: HeaderProps) {
         headerBg ? "bg-background/90" : ""
       )}
     >
-      <Link href={"/"} className="header-branch">
-        <Typography
-          variant={"h3"}
-          className="flex items-center gap-1
-        "
-        >
-          <span className="font-light">New feeed</span> |{" "}
-          <span className="bg-foreground text-background rounded-full px-4">
-            hautrank2
+      <div className="header-branch">
+        <Typography variant={"h3"} className="flex items-center gap-1">
+          <Link href={"/"} className="font-light whitespace-nowrap">
+            New feed
+          </Link>{" "}
+          <span className="hidden sm:block">
+            |{" "}
+            <Link
+              href={"https://www.linkedin.com/in/hautrank2"}
+              target="_blank"
+              className="bg-foreground text-background rounded-full px-4"
+            >
+              hautrank2
+            </Link>
           </span>
         </Typography>
-      </Link>
+      </div>
       <div className="header-search px-16"></div>
       <div className="header-extra flex items-center gap-4">
         {/* <Nav /> */}

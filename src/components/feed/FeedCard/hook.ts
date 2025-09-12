@@ -1,4 +1,4 @@
-import { FeedModel, PatchFeedDto } from "~/types/feed";
+import { FeedModel } from "~/types/feed";
 import { FeedCardProps } from ".";
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
