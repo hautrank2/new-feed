@@ -35,3 +35,16 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    const users = (await readJsonFile<UserModel[]>("src/data/user.json")) ?? [];
+    return NextResponse.json(users, { status: 201 });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json(
+      { error: "Failed to create user" },
+      { status: 500 }
+    );
+  }
+}

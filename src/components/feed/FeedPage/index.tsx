@@ -1,19 +1,24 @@
 "use client";
 
 import React from "react";
-import { useFeed } from "../context";
+import { useFeedCtx } from "../context";
 import { useFeedPage } from "./hook";
 import { FeedCard } from "../FeedCard";
 import { cn } from "~/lib/utils";
+import { FeedFilter } from "../FeedFilter";
+import { Skeleton } from "~/components/ui/skeleton";
 
 export const FeedPage = () => {
-  const { feedData, feeds } = useFeed();
+  const { feedData, feeds, containerRef } = useFeedCtx();
   const {} = useFeedPage();
-
   return (
-    <div className="mt-[var(--header-height)] pt-8 container mx-auto max-w-4xl pb-8">
+    <div
+      ref={containerRef}
+      className="mt-[var(--header-height)] pt-8 pb-8 min-h-[calc(100vh-var(--header-height))] h-[calc(100vh-var(--header-height))] overflow-y-auto"
+    >
       {/* filter */}
-      <ul className="px-4">
+      <FeedFilter />
+      <ul className="px-4 container mx-auto max-w-4xl">
         {feeds.map((feed, index) => {
           const isFirst = index === 0;
           return (
@@ -23,6 +28,15 @@ export const FeedPage = () => {
           );
         })}
       </ul>
+      {feedData.isFetching && (
+        <div className="flex space-y-3">
+          <Skeleton className="h-12 w-12 rounded-full" />
+          <div>
+            <Skeleton className="h-12" />
+            <Skeleton className="h-12" />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

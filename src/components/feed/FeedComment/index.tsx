@@ -9,7 +9,7 @@ import { Input } from "~/components/ui/input";
 import { OctagonX, SendHorizonal, Trash2 } from "lucide-react";
 import { Controller } from "react-hook-form";
 import { Badge } from "~/components/ui/badge";
-import { useFeed } from "../context";
+import { useFeedCtx } from "../context";
 
 export type FeedCommentProps = {
   feedData: FeedModel;
@@ -121,7 +121,7 @@ const FeedCommentItem = ({
   onDelete,
   loading,
 }: FeedCommentItemProps) => {
-  const { session } = useFeed();
+  const { session } = useFeedCtx();
   const canReply = depth === 0 && !!onReply;
   const authorName = cmtData.author?.name ?? "User";
   const authorImage = cmtData.author?.image ?? undefined;

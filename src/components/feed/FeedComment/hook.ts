@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import httpClient from "~/api/httpClient";
-import { useFeed } from "../context";
+import { useFeedCtx } from "../context";
 import { CommentModel, CreateCommentDto } from "~/types/feed";
 
 const commentSchema = z.object({
@@ -21,7 +21,7 @@ export const useFeedComment = ({ feedData }: FeedCommentProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { session } = useFeed();
+  const { session } = useFeedCtx();
 
   const queryKey = ["feed", "comments", feedData.id] as const;
 
