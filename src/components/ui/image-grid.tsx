@@ -21,7 +21,7 @@ export default function ImageGrid({
   const moreCount = imgs.length - 4;
 
   return (
-    <div>
+    <div data-testid="image-grid" className="image-grid">
       {/* GRID */}
       <div
         className={`grid gap-1 ${
@@ -42,7 +42,7 @@ export default function ImageGrid({
             <Image
               src={src}
               alt={`img-${idx}`}
-              fill
+              fill={true}
               sizes={`${cellSize}px`}
               style={{ objectFit }}
             />

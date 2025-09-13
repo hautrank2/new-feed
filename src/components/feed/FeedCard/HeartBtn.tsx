@@ -47,6 +47,7 @@ export function HeartButton({
 
   return (
     <Button
+      data-testid="heart-btn"
       className={cn("flex-1", liked ? "fill-red-500 text-red-500" : "")}
       variant="ghost"
       onClick={handleClick}

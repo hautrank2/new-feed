@@ -144,8 +144,6 @@ export function useUpload({
         };
       });
 
-      console.log(items, picked);
-
       const next = [...items, ...picked];
       setItems(next);
       onChange?.(next.map((n) => n.file));

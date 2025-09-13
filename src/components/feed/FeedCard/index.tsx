@@ -112,6 +112,6 @@ export const FeedCard = (props: FeedCardProps) => {
       </Card>
     )
   ) : (
-    <div></div>
+    <div data-testid="feed-null" className="feed-null"></div>
   );
 };

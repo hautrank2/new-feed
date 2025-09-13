@@ -27,7 +27,6 @@ function Header({ session }: HeaderProps) {
   const headerHeight = 64;
   const [headerBg, setHeaderBg] = useState(false);
   const authed = !!session && !!session.user;
-  console.log(session, authed);
 
   useEffect(() => {
     const trackingScroll = () => {
