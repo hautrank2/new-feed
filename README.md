@@ -43,12 +43,14 @@ First, run the development server:
    npm install
    ```
 
-3. **Run dev**
+3. **Create .env file**
+   - At root, create the .env file provided earlier or contact me (hautrantrung.02@gmail.com) to receive the file
+4. **Run dev**
 
    ```bash
    npm run dev
    ```
 
-4. Open http://localhost:3000
+5. Open http://localhost:3000
 
 Video demo: [youtube](https://www.youtube.com/watch?v=SqtUhSUSMRE)
