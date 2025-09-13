@@ -10,10 +10,12 @@ export function HeartButton({
   liked: initLiked,
   count: initCount,
   onToggleHeart,
+  disabled,
 }: {
   liked: boolean;
   count: number;
   onToggleHeart: () => Promise<ToggleHeart>;
+  disabled: boolean;
 }) {
   const [liked, setLiked] = useState(initLiked);
   const [count, setCount] = useState(initCount);
@@ -51,6 +53,7 @@ export function HeartButton({
       className={cn("flex-1", liked ? "fill-red-500 text-red-500" : "")}
       variant="ghost"
       onClick={handleClick}
+      disabled={disabled}
     >
       <Heart className={liked ? "fill-red-500 text-red-500" : ""} />
       Heart ({count})

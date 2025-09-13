@@ -28,6 +28,7 @@ export type FeedCardProps = {
 };
 export const FeedCard = (props: FeedCardProps) => {
   const {
+    session,
     feed,
     handleOpenComment,
     handleCloseComment,
@@ -82,11 +83,13 @@ export const FeedCard = (props: FeedCardProps) => {
               count={feed.tym.length}
               liked={feed.liked}
               onToggleHeart={handleToggleHeart}
+              disabled={!session}
             />
             <Button
               className="flex-1"
               variant={"ghost"}
               onClick={() => handleOpenComment(feed)}
+              disabled={!session}
             >
               Comment
             </Button>

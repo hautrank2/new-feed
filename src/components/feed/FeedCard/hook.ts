@@ -4,8 +4,10 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import httpClient from "~/api/httpClient";
 import { ToggleHeart } from "./HeartBtn";
+import { useFeedCtx } from "../context";
 
 export const useFeedCard = ({ feedId }: FeedCardProps) => {
+  const { session } = useFeedCtx();
   const {
     data: feed,
     refetch,
@@ -46,6 +48,7 @@ export const useFeedCard = ({ feedId }: FeedCardProps) => {
   };
 
   return {
+    session,
     handleOpenComment,
     handleCloseComment,
     openComment,
