@@ -328,14 +328,6 @@
     "parentId": null
   },
   {
-    "id": "d31e7068-eb08-46b6-a895-7249a6683a22",
-    "feedId": "0ea5367a-0d99-4675-8483-15f1a379211d",
-    "authorId": "10",
-    "content": "Comment 4 on feed 0ea536",
-    "createdAt": "2024-10-28T13:11:11.861514",
-    "parentId": null
-  },
-  {
     "id": "39ff345a-005d-4c30-bcfa-f8cd5f016cfb",
     "feedId": "0ea5367a-0d99-4675-8483-15f1a379211d",
     "authorId": "8",
