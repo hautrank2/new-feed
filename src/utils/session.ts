@@ -1,13 +1,13 @@
-import { User } from "~/types/user";
 import "server-only";
-import { SignJWT, jwtVerify } from "jose";
+import { JWTPayload, SignJWT, jwtVerify } from "jose";
+import { UserModel } from "~/types/user";
 
-type SessionPayload = {};
+type SessionPayload = JWTPayload;
 
-export const getUserData = (localStorage: Storage): User | null => {
+export const getUserData = (localStorage: Storage): UserModel | null => {
   const localData = localStorage.getItem("userData");
   if (localData && localData !== "undefined") {
-    return JSON.parse(localData) as User;
+    return JSON.parse(localData) as UserModel;
   }
   return null;
 };
