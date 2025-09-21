@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-export function buildCommentTreeWithUser(
+function buildCommentTreeWithUser(
   list: CommentModel[],
   users: UserModel[]
 ): CommentModel[] {
