@@ -4,10 +4,10 @@ import { readJsonFile } from "~/utils/file";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const userId = params.id;
+    const { id: userId } = await params;
     const users = await readJsonFile<UserModel[]>("src/data/user.json");
     const find = users.find((e) => e.id === userId);
     if (find) {
