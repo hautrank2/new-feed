@@ -24,7 +24,7 @@ export const useFeedCard = ({ feedId }: FeedCardProps) => {
     setOpenComment(feed);
   };
 
-  const handleCloseComment = (fetch?: boolean) => {
+  const handleCloseComment = () => {
     if (refetch) {
       refetch();
     }
@@ -40,7 +40,9 @@ export const useFeedCard = ({ feedId }: FeedCardProps) => {
         liked: res.data.liked,
         count: res.data.tym.length,
       };
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
     return {
       liked: false,
       count: 0,

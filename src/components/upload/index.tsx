@@ -12,6 +12,7 @@ import {
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 import { useUpload } from "./hook";
+import Image from "next/image";
 
 export type UploadProps = {
   value?: File[];
@@ -157,11 +158,13 @@ const Uploader = forwardRef<UploaderRef, UploadProps>((props, ref) => {
             <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {items.map((it) => (
                 <li key={it.id} className="relative group">
-                  <img
+                  <Image
                     src={it.previewUrl}
                     alt={it.file.name}
-                    className="h-40 w-full object-cover rounded-xl border"
+                    className="w-full object-cover rounded-xl border"
                     loading="lazy"
+                    width={40}
+                    height={40}
                   />
                   <button
                     type="button"

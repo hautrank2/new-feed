@@ -1,32 +1,22 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
-import { Lock, Loader2, User, LogIn, ArrowRight, Chrome } from "lucide-react";
+import { Chrome } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import { Separator } from "~/components/ui/separator";
 import { useAuth } from "./pageHook";
 
 export type AuthPageProps = {
   prePathname: string;
 };
 const AuthPage = (props: AuthPageProps) => {
-  const { form, handleLogin, loading, handleLoginGoogle } = useAuth(props);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = form;
+  const { handleLoginGoogle } = useAuth(props);
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted flex items-center justify-center p-4">

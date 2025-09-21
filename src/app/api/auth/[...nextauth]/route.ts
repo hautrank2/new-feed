@@ -1,11 +1,10 @@
-import { JWT } from "next-auth/jwt";
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { UserModel } from "~/types/user";
 import { readJsonFile, writeJsonFile } from "~/utils/file";
 
 const MAX_AGE = +(process.env.NEXTAUTH_MAXAGE || 60 * 60 * 24 * 30);
-export const authOptions: AuthOptions = {
+const authOptions: AuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",

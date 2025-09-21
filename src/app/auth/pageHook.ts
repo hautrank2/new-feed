@@ -13,8 +13,6 @@ export const LoginSchema = z.object({
 export type LoginValues = z.infer<typeof LoginSchema>;
 
 export const useAuth = ({ prePathname }: AuthPageProps) => {
-  const [loading, setLoading] = useState(false);
-
   const form = useForm<LoginValues>({ resolver: zodResolver(LoginSchema) });
 
   const handleLoginGoogle = async () => {
@@ -26,7 +24,6 @@ export const useAuth = ({ prePathname }: AuthPageProps) => {
 
   return {
     form,
-    loading,
     handleLogin,
     handleLoginGoogle,
   };

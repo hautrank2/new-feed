@@ -13,7 +13,6 @@ import { FeedModel } from "~/types/feed";
 import { AppSession } from "~/types/session";
 import { FeedFilterValues } from "./FeedFilter/type";
 import { UserModel } from "~/types/user";
-import { prettyObject } from "~/utils/common";
 import { startOfDay, addDays } from "date-fns";
 
 export type FeedContextValue = {

@@ -29,9 +29,7 @@ export const FeedComment = (props: FeedCommentProps) => {
     loading,
   } = useFeedComment(props);
   const {
-    register,
     handleSubmit,
-    reset,
     formState: { errors, isSubmitting },
   } = form;
   return (

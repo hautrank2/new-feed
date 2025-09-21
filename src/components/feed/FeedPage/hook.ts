@@ -10,7 +10,7 @@ export const useFeedPage = () => {
     setOpenComment(feed);
   };
 
-  const handleCloseComment = (refetch?: boolean) => {
+  const handleCloseComment = () => {
     setOpenComment(null);
   };
 
