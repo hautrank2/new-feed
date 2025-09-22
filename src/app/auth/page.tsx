@@ -12,11 +12,8 @@ import {
 } from "~/components/ui/card";
 import { useAuth } from "./pageHook";
 
-export type AuthPageProps = {
-  prePathname: string;
-};
-const AuthPage = (props: AuthPageProps) => {
-  const { handleLoginGoogle } = useAuth(props);
+const AuthPage = () => {
+  const { handleLoginGoogle } = useAuth();
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted flex items-center justify-center p-4">

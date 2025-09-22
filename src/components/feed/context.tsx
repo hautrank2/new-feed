@@ -76,6 +76,8 @@ export default function FeedProvider({
     },
   });
 
+  const { hasNextPage, isFetchingNextPage, fetchNextPage } = feedData;
+
   const { data: users } = useQuery<UserModel[]>({
     initialData: [],
     queryKey: ["users"],
@@ -111,11 +113,11 @@ export default function FeedProvider({
         if (
           armedRef.current &&
           dist <= THRESHOLD &&
-          feedData.hasNextPage &&
-          !feedData.isFetchingNextPage
+          hasNextPage &&
+          !isFetchingNextPage
         ) {
           armedRef.current = false; // disarm ngay để không bắn liên tiếp
-          feedData.fetchNextPage();
+          fetchNextPage();
         }
       });
     };
@@ -126,7 +128,7 @@ export default function FeedProvider({
       cancelAnimationFrame(raf);
     };
     // chỉ theo dõi các cờ của query
-  }, [feedData.hasNextPage, feedData.isFetchingNextPage]);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
     <FeedContext.Provider

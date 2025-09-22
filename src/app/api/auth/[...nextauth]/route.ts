@@ -60,7 +60,7 @@ const authOptions: AuthOptions = {
       }
       return false;
     },
-    async jwt({ token, ...rest }) {
+    async jwt({ token }) {
       const users: UserModel[] = await readJsonFile("src/data/user.json");
       const findUser = users.find((u) => u.email === token.email);
 

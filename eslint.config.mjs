@@ -18,6 +18,13 @@ const eslintConfig = [
       "@next/next/no-page-custom-font": "off",
     },
   },
+  {
+    files: ["**/__tests__/**", "**/*.test.tsx", "**/*.test.ts"],
+    rules: {
+      "@typescript-eslint/no-unused-vars": "off",
+      "@next/next/no-img-element": "off",
+    },
+  },
 ];
 
 export default eslintConfig;
